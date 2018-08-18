@@ -24,7 +24,7 @@ DataExchange::DataExchange(const QString &ip, int port, int waiteTime):
 
 DataExchange::~DataExchange()
 {
-  Log::loggerRoot.debug("DataExchange::~DataExchange()");
+  qDebug() << "DataExchange::~DataExchange()";
   if(m_socket)
   {
     m_socket->abort();
@@ -42,30 +42,30 @@ void DataExchange::addToWrite(const QByteArray &data)
   m_queueToWrite.enqueue(data);
   if(m_state == IDLE)
   {
-    Log::loggerRoot.debug("emit queueContainsData()");
+    qDebug() << "emit queueContainsData()";
     emit queueContainsData();
   }
 }
 
 void DataExchange::connectedToHost()
 {
-  Log::loggerRoot.info("Connected to host " + m_ip.toStdString() + ":" + QString::number(m_port).toStdString() + " OK");
+  qDebug() << "Connected to host " <<  m_ip << ":" << QString::number(m_port) << " OK";
 }
 
 void DataExchange::disconnectedFromHost()
 {
-  Log::loggerRoot.debug("Disconected from host");
+  qDebug() << "Disconected from host";
   connectToHost();
 }
 
 void DataExchange::socketChangeState(QAbstractSocket::SocketState state)
 {
-  Log::loggerRoot.debug("Socket change state to " + QString::number(state).toStdString());
+  qDebug() << "Socket change state to " << QString::number(state);
 }
 
 void DataExchange::socketError(QAbstractSocket::SocketError error)
 {
-  Log::loggerRoot.error("Socket error code " + QString::number(error).toStdString());
+  qCritical() << "Socket error code " << QString::number(error);
   m_socket->disconnectFromHost();
 
 }
@@ -92,7 +92,7 @@ void DataExchange::readyRead()
     }
     if(numRead == 0 && !socket->waitForReadyRead(m_waiteTime))
     {
-      Log::loggerRoot.debug("WaitForReadyRead timeout or read data is emty");
+      qDebug() << "WaitForReadyRead timeout or read data is emty";
       break;
     }
   }
@@ -106,7 +106,7 @@ void DataExchange::readyRead()
 
 bool DataExchange::connectToHost()
 {
-  Log::loggerRoot.debug("Start connect to host");
+  qDebug() << "Start connect to host";
   if(m_socket != 0x0)
   {
     m_socket->disconnect();
@@ -132,7 +132,7 @@ bool DataExchange::connectToHost()
     if(!m_socket->waitForConnected(m_waiteTime))
     {
       QAbstractSocket::SocketError error = m_socket->error();
-      Log::loggerRoot.error("Can't connect to device by ip:" + m_ip.toStdString() + ":" + QString::number(m_port).toStdString() + " Socket error is: " + QString::number(error).toStdString() );
+      qCritical() << "Can't connect to device by ip:" <<  m_ip << ":" << QString::number(m_port) << " Socket error is: " << QString::number(error);
       QApplication::processEvents(QEventLoop::AllEvents, 100);
       ++count;
       continue;
@@ -159,7 +159,7 @@ bool DataExchange::connectToHost()
       }
       if(numRead == 0 && !m_socket->waitForReadyRead(m_waiteTime))
       {
-        Log::loggerRoot.debug("WaitForReadyRead timeout or read data is emty");
+        qDebug() << "WaitForReadyRead timeout or read data is emty";
         break;
       }
     }
@@ -175,7 +175,7 @@ void DataExchange::writeDataToSocket()
 {
   if(m_socket == 0x0)
   {
-    Log::loggerRoot.debug("Socket is NULL");
+    qDebug() << "Socket is NULL";
     return;
   }
 
@@ -184,20 +184,20 @@ void DataExchange::writeDataToSocket()
   {
     if(m_socket->state() != QAbstractSocket::ConnectedState)
     {
-      Log::loggerRoot.debug("Socket in no connected sate");
+      qDebug() << "Socket in no connected sate";
       goto EndWhile;
     }
 
-    Log::loggerRoot.debug("Lock QUEUE mutex");
+    qDebug() << "Lock QUEUE mutex";
     {
       QMutexLocker q(&m_queue);
-      Log::loggerRoot.debug("Lock QUEUE mutex OK");
+      qDebug() << "Lock QUEUE mutex OK";
       QByteArray ar = m_queueToWrite.dequeue();
       m_socket->write(ar, ar.size());
     }
     if(!m_socket->waitForBytesWritten(m_waiteTime))
     {
-      Log::loggerRoot.error("Can't write to socket: timeout");
+      qCritical() << "Can't write to socket: timeout";
     }
 
     //read
@@ -220,7 +220,7 @@ void DataExchange::writeDataToSocket()
         }
         if(numRead == 0 && !m_socket->waitForReadyRead(m_waiteTime))
         {
-          Log::loggerRoot.debug("WaitForReadyRead timeout or read data is emty");
+          qDebug() << "WaitForReadyRead timeout or read data is emty";
           break;
         }
       }
@@ -232,7 +232,7 @@ EndWhile:
     QApplication::processEvents(QEventLoop::AllEvents, 10);
     //((SleepThread*)thread())->msleep(1000);
   }
-  Log::loggerRoot.debug("UNLock SOCKET mutex");
+  qDebug() << "UNLock SOCKET mutex";
   m_state = IDLE;
 }
 

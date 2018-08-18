@@ -1,7 +1,7 @@
 #include <QString>
 #include <QDebug>
 #include <iostream>
-#include "commonconst.h"
+#include "CommonConst.h"
 #include "Settings.h"
 #include "ProtocolUtil.h"
 

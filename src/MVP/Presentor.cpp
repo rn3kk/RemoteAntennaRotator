@@ -13,10 +13,12 @@ QWidget *Presentor::getView()
 
 void Presentor::dataFromEncoder(void *p)
 {
-  if(p == 0x0) return;
-  EncoderData* e = (EncoderData*)p;
-  azIsChange(e->deg);
-  delete e;
+  if(p != 0x0)
+    {
+      EncoderData* e = (EncoderData*)p;
+      azIsChange(e->deg);
+      delete e;
+    }
 }
 
 void Presentor::encoderChangeSate(int state)

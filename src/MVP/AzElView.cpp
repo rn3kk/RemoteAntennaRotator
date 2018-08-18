@@ -1,4 +1,5 @@
 #include <QVBoxLayout>
+#include <QLoggingCategory>
 #include "../Settings.h"
 #include "../Log/Log.h"
 
@@ -53,7 +54,7 @@ void AzElView::toEndPressed()
 
 void AzElView::attChanged(const QString &attValue)
 {
-  Log::loggerRoot.debug("ATT is changed to " + attValue.toStdString());
+  qDebug() << "ATT is changed to " << attValue;
   unsigned char value = attValue.toUInt();
   m_rotrator->attChange(value);
 }

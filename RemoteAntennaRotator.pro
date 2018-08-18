@@ -21,13 +21,13 @@ CONFIG(release, debug|release) {
   OUT_DIR = distr/release
 }
 
-#DESTDIR = $${OUT_DIR}
+DESTDIR = $${OUT_DIR}
 
-LIBS += -L./lib/log4cpp/lib/$${BUILD_TYPE}
-INCLUDEPATH += ./lib/log4cpp/include
-LIBS += -llog4cpp
+#LIBS += -L./lib/log4cpp/lib/$${BUILD_TYPE}
+#INCLUDEPATH += ./lib/log4cpp/include
+#LIBS += -llog4cpp
 
-LIBS += -lwsock32 -ladvapi32 #for log4cpp
+#LIBS += -lwsock32 -ladvapi32 #for log4cpp
 
 
 SOURCES += \

@@ -1,6 +1,6 @@
 #include <QStringList>
 #include <QVariant>
-#include"Log/Log.h"
+#include <QLoggingCategory>
 #include "Settings.h"
 
 static const QString TCP_UART_CONTROLLER = "tcp_uart_controller";
@@ -16,7 +16,6 @@ static const QString MAX_WAITE_DATA = "maxWaiteData";
 static const QString ADDRESS = "address";
 static const QString ZERO_ANGLE = "zeroAngle";
 static const QString SEPARATOR = "/";
-
 
 Settings* Settings::m_instance=0x0;
 
@@ -55,32 +54,32 @@ void Settings::resetInstance()
 
 bool Settings::loadSettings()
 {
-   Log::loggerRoot.info("Start loadSettings()");
-   bool ok(true);
-   QSettings settings("Config/settings.ini", QSettings::IniFormat);
-   if(!loadTcpModule(settings, TCP_UART_CONTROLLER))
-   {
-     Log::loggerRoot.error("Can't load tcp uart module list");
-     return false;
-   }
+  qInfo() << "Start loadSettings()";
+  bool ok(true);
+  QSettings settings("Config/settings.ini", QSettings::IniFormat);
+  if(!loadTcpModule(settings, TCP_UART_CONTROLLER))
+  {
+    qCritical()  << "Can't load tcp uart module list";
+    return false;
+  }
 
-   QStringList groups = settings.childGroups();
-   foreach (QString groupName, groups)
-   {
-     if(groupName.contains(ENCODER) && !loadEncoder(settings, groupName))
-     {
-       ok = false;
-       break;
-     }
-     else if(groupName.contains(ROTATOR) && !loadRotator(settings, groupName))
-     {
-       ok = false;
-       break;
-     }
-   }
+  QStringList groups = settings.childGroups();
+  foreach (QString groupName, groups)
+  {
+    if(groupName.contains(ENCODER) && !loadEncoder(settings, groupName))
+    {
+      ok = false;
+      break;
+    }
+    else if(groupName.contains(ROTATOR) && !loadRotator(settings, groupName))
+    {
+      ok = false;
+      break;
+    }
+  }
 
-   Log::loggerRoot.info("End loadSettings() " + std::string(ok?"":"load error"));
-   return ok;
+  qInfo() << "End loadSettings() " << (ok?"":"load error");
+  return ok;
 }
 
 const QVector<Encoder *> &Settings::getEncoderList() const
@@ -98,13 +97,13 @@ bool Settings::loadEncoder(const QSettings &settings, const QString &path)
   QString id = settings.value(path+SEPARATOR+TCP_UART_CONTROLLER_ID).toString();
   if(id.isEmpty())
   {
-    Log::loggerRoot.error((path+SEPARATOR+TCP_UART_CONTROLLER_ID).toStdString()+ "is empty");
+    qCritical() << path << SEPARATOR << TCP_UART_CONTROLLER_ID << "is empty";
     return false;
   }
   QString name = settings.value(path+SEPARATOR+NAME).toString();
   if(id.isEmpty())
   {
-    Log::loggerRoot.error((path+SEPARATOR+NAME).toStdString()+ "is empty");
+    qCritical() << path << SEPARATOR << NAME << "is empty";
     return false;
   }
   QString address = settings.value(path+SEPARATOR+ADDRESS).toString();
@@ -112,7 +111,7 @@ bool Settings::loadEncoder(const QSettings &settings, const QString &path)
 
   if(address.isEmpty())
   {
-    Log::loggerRoot.error((path+SEPARATOR+ADDRESS).toStdString()+ "is empty");
+    qCritical() << path << SEPARATOR << ADDRESS << "is empty";
     return false;
   }
   TcpUartModule* tcpModule =0x0;
@@ -130,7 +129,7 @@ bool Settings::loadEncoder(const QSettings &settings, const QString &path)
   }
   else
   {
-    Log::loggerRoot.error("Can't find tcp uart module for "+ path.toStdString());
+    qCritical() << "Can't find tcp uart module for " << path;
     return false;
   }
   return true;
@@ -141,7 +140,7 @@ bool Settings::loadRotator(const QSettings &settings, const QString &path)
   QString id = settings.value(path+SEPARATOR+TCP_UART_CONTROLLER_ID).toString();
   if(id.isEmpty())
   {
-    Log::loggerRoot.error((path+SEPARATOR+TCP_UART_CONTROLLER_ID).toStdString()+ "is empty");
+    qCritical() << path << SEPARATOR << TCP_UART_CONTROLLER_ID << "is empty";
     return false;
   }
 
@@ -149,7 +148,7 @@ bool Settings::loadRotator(const QSettings &settings, const QString &path)
 
   if(address.isEmpty())
   {
-    Log::loggerRoot.error((path+SEPARATOR+ADDRESS).toStdString()+ "is empty");
+    qCritical() << path << SEPARATOR << ADDRESS << "is empty";
     return false;
   }
 
@@ -168,7 +167,7 @@ bool Settings::loadRotator(const QSettings &settings, const QString &path)
   }
   else
   {
-    Log::loggerRoot.error("Can't find tcp uart module for "+ path.toStdString());
+    qCritical() << "Can't find tcp uart module for " << path;
     return false;
   }
   return true;
@@ -179,25 +178,25 @@ bool Settings::loadTcpModule(const QSettings &settings, const QString &path)
   QString id = settings.value(path+SEPARATOR+ID).toString();
   if(id.isEmpty())
   {
-    Log::loggerRoot.error((path+SEPARATOR+ID).toStdString()+ "is empty");
+    qCritical() << path << SEPARATOR << ID << "is empty";
     return false;
   }
   QString ip = settings.value(path+SEPARATOR+IP).toString();
   if(ip.isEmpty())
   {
-    Log::loggerRoot.error((path+SEPARATOR+IP).toStdString()+ "is empty");
+    qCritical() << path << SEPARATOR << IP << " is empty";
     return false;
   }
   int port = settings.value(path+SEPARATOR+PORT).toInt();
   if(port == 0)
   {
-    Log::loggerRoot.error((path+SEPARATOR+PORT).toStdString()+ "is empty");
+    qCritical() << path << SEPARATOR << PORT << " is empty";
     return false;
   }
   int maxWaiteData = settings.value(path+SEPARATOR+MAX_WAITE_DATA).toInt();
   if(maxWaiteData==0)
   {
-    Log::loggerRoot.error((path+SEPARATOR+MAX_WAITE_DATA).toStdString()+ "is empty");
+    qCritical() << path << SEPARATOR << MAX_WAITE_DATA << " is empty";
     return false;
   }
   m_tcpModuleList.append(new TcpUartModule(id,ip, port, maxWaiteData));
@@ -218,4 +217,3 @@ int Settings::getAngleShiftForEncoder(unsigned short address) const
     }
   }
 }
-

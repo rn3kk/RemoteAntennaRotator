@@ -4,9 +4,9 @@
 #include "TcpUartModule.h"
 
 TcpUartModule::TcpUartModule():
-m_id(QString()),
-m_dataExchangeThread(0x0),
-m_dataExchange(0x0)
+  m_id(QString()),
+  m_dataExchangeThread(0x0),
+  m_dataExchange(0x0)
 {
 
 }

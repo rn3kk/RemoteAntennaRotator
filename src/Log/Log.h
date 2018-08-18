@@ -4,20 +4,8 @@
 
 #ifndef LOG_H
 #define LOG_H
+#include <QtMsgHandler>
 
-#include <QString>
-#include <log4cpp/Category.hh>
-
-class Log
-{
-public:
-
-  static log4cpp::Category& loggerRoot;
-  static bool initialize(const QString& pathToLoggerProp);
-
-private:
-  static bool checkForFolderExistance(const QString& pathToLogIni);
-
-};
+void toLog(QtMsgType type, const QMessageLogContext &context, const QString &msg);
 
 #endif /* LOG_H */

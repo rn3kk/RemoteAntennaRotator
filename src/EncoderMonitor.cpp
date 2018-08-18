@@ -33,7 +33,7 @@ void EncoderMonitor::process()
 
 void EncoderMonitor::setTerminate()
 {
-  Log::loggerRoot.debug("EncoderMonitor receive set terminate signal");
+  qDebug() << "EncoderMonitor receive set terminate signal";
   m_terminate = true;
 }
 

@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QThread>
 
+#include "iostream"
 #include "Settings.h"
 #include "Log/Log.h"
 #include "DataExchange.h"
@@ -9,18 +10,20 @@
 #include "MessageBus.h"
 #include "EncoderMonitor.h"
 
+#include <QLoggingCategory>
+
+void toLog(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+
 int main(int argc, char *argv[])
 {
+  qInstallMessageHandler(toLog);
+
   ProtocolUtil pu;
-  if(!Log::initialize("Config/log4cpp.ini"))
-  {
-    std::cout << "Error load Config/log4cpp.ini";
-    return 0;
-  }
+
   Settings* settings = Settings::getInstance();
   if(settings == 0x0)
-  {
-    Log::loggerRoot.error("Can't load settings");
+  {    
+    qCritical("Can't load settings");
     return 0;
   }
 
