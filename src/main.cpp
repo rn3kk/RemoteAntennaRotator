@@ -16,6 +16,7 @@ void toLog(QtMsgType type, const QMessageLogContext &context, const QString &msg
 
 int main(int argc, char *argv[])
 {
+  QApplication a(argc, argv);
   qInstallMessageHandler(toLog);
 
   ProtocolUtil pu;
@@ -26,8 +27,6 @@ int main(int argc, char *argv[])
     qCritical("Can't load settings");
     return 0;
   }
-
-  QApplication a(argc, argv);
 
   MessageBus* messageBus = MessageBus::getInstance();
 

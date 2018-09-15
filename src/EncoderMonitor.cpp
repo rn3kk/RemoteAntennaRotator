@@ -14,8 +14,7 @@ EncoderMonitor::EncoderMonitor():
 
 void EncoderMonitor::process()
 {
-  const QVector<Encoder*>& encoderList = Settings::getInstance()->getEncoderList();
-  //const QVector<TcpUartModule*>& moduleList = Settings::getInstance()->getTcpModuleList();
+  const QVector<Encoder*>& encoderList = Settings::getInstance()->getEncoderList();  
   if(encoderList.count() == 0)
     emit finished();
 

@@ -13,9 +13,10 @@ DataExchange::DataExchange(const QString &ip, int port, int waiteTime):
   m_ip(ip),
   m_port(port),
   m_waiteTime(waiteTime),
-  m_state(IDLE),
-  m_socket(0x0)
+  m_socket(0x0),
+  m_state(IDLE)
 {
+  qDebug() << "DataExchange::DataExchange()";
   m_queueToWrite.clear();
   QObject::connect(this, SIGNAL(queueContainsData()), this, SLOT(writeDataToSocket()));
   MessageBus* bus = MessageBus::getInstance();

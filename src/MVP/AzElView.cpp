@@ -65,12 +65,6 @@ void AzElView::createView()
 
   QHBoxLayout* hBox = new QHBoxLayout(this);
 
-  m_attBox = new QSpinBox(dynamic_cast<QWidget*>(hBox));
-  m_attBox->setRange(0, 30);
-  m_attBox->stepBy(1);
-  m_attBox->setValue(0);
-  connect(m_attBox, SIGNAL(valueChanged(QString)), this, SLOT(attChanged(QString)));
-
   m_toLeft = new QPushButton(dynamic_cast<QWidget*>(hBox));
   m_toLeft->setAutoRepeat(true);
   m_toLeft->setAutoRepeatInterval(300);
@@ -79,7 +73,6 @@ void AzElView::createView()
   connect(m_toLeft, SIGNAL(pressed()), this, SLOT(toLeftPressed()));
   connect(m_toLeft, SIGNAL(released()), this, SLOT(toEndPressed()));
 
-  hBox->addWidget(m_attBox);
   hBox->addWidget(m_toLeft);
 
   m_toRight = new QPushButton(dynamic_cast<QWidget*>(hBox));
@@ -96,14 +89,9 @@ void AzElView::createView()
   m_az = new QLabel(dynamic_cast<QWidget*>(vbox));
   m_az->setText("-1");
 
-  m_el = new QLabel(dynamic_cast<QWidget*>(vbox));
-  m_el->setText("El:-1");
-
   vbox->addWidget(m_az);
-  vbox->addWidget(m_el);
   QFont font("Arial", 20, QFont::Bold);
   m_az->setFont(font);
-  m_el->setFont(font);
 
   hBox->addLayout(vbox);
   hBox->addWidget(m_toRight);
