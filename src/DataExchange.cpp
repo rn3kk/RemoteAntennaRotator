@@ -6,7 +6,6 @@
 #include "MessageBus.h"
 #include "DataExchange.h"
 
-
 static const QString XML_BEGIN_STRING = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 
 DataExchange::DataExchange(const QString &ip, int port, int waiteTime):
@@ -107,7 +106,7 @@ void DataExchange::readyRead()
 
 bool DataExchange::connectToHost()
 {
-  qDebug() << "Start connect to host";
+  qDebug() << QString("Start connect to host %1 port %2").arg(m_ip).arg(m_port);
   if(m_socket != 0x0)
   {
     m_socket->disconnect();
