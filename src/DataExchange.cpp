@@ -185,7 +185,10 @@ void DataExchange::writeDataToSocket()
     if(m_socket->state() != QAbstractSocket::ConnectedState)
     {
       qDebug() << "Socket in no connected sate";
-      goto EndWhile;
+      QMutexLocker q(&m_queue);
+      m_queueToWrite.clear();
+      QApplication::processEvents(QEventLoop::AllEvents, 10);
+      continue;
     }
 
     qDebug() << "Lock QUEUE mutex";
@@ -228,9 +231,8 @@ void DataExchange::writeDataToSocket()
       EncoderData* d = new EncoderData(util.getEncoderData(result));
       emit dataFromEncoder(d);
     }
-EndWhile:
     QApplication::processEvents(QEventLoop::AllEvents, 10);
-    //((SleepThread*)thread())->msleep(1000);
+    thread()->msleep(10);
   }
   qDebug() << "UNLock SOCKET mutex";
   m_state = IDLE;

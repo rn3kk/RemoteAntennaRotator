@@ -36,7 +36,6 @@ int main(int argc, char *argv[])
 
   QObject::connect(messageBus, SIGNAL(encoderData(void*)), &p, SLOT(dataFromEncoder(void*)));
 
-
   QThread* encoderMonitorThread = new QThread();
   EncoderMonitor* em = new EncoderMonitor();
   em->moveToThread(encoderMonitorThread);

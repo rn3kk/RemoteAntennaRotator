@@ -3,7 +3,7 @@
 
 #include <QSettings>
 #include<QVector>
-#include"Encoder.h"
+#include"Servo.h"
 #include"Rotator.h"
 #include"TcpUartModule.h"
 
@@ -15,25 +15,20 @@ public:
 
   bool loadSettings();
 
-  const QVector<Encoder *> &getEncoderList() const;
-  const QVector<TcpUartModule *> &getTcpModuleList() const;
+  const QVector<Servo *> &getServoList() const;
 
-  const QVector<Rotator *> getRotatorList() const;
   int getAngleShiftForEncoder(unsigned short address) const;
 
 private:
   Settings();
   ~Settings();
-  bool loadEncoder(const QSettings& settings, const QString& path);
-  bool loadRotator(const QSettings& settings, const QString& path);
+  bool loadServo(const QSettings& settings, const QString& path);
   bool loadTcpModule(const QSettings& settings, const QString& path);
 
 private:
   static Settings* m_instance;
-  QVector<Encoder*> m_encoderList;
-  QVector<TcpUartModule*> m_tcpModuleList;
-  QVector<Rotator*> m_rotatorList;
-
+  QVector<Servo*> m_servoList;
+  TcpUartModule* m_tcpModule;
 };
 
 #endif // SETTINGS_H

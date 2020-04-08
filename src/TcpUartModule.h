@@ -10,16 +10,12 @@ class TcpUartModule
 {
 public:
   TcpUartModule();
-  TcpUartModule(const QString& id, const QString&  ip, int port, int maxWaitetime);
+  TcpUartModule(const QString&  ip, int port, int maxWaitetime);
   ~TcpUartModule();
 
   void writeData(const QByteArray& data);
 
-  QString id() const;
-
 private:
-  QString m_id;
-
   QThread* m_dataExchangeThread;
   DataExchange* m_dataExchange;
 };

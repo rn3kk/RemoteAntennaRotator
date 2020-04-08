@@ -14,15 +14,15 @@ EncoderMonitor::EncoderMonitor():
 
 void EncoderMonitor::process()
 {
-  const QVector<Encoder*>& encoderList = Settings::getInstance()->getEncoderList();  
-  if(encoderList.count() == 0)
+  const QVector<Servo*>& servoList = Settings::getInstance()->getServoList();
+  if(servoList.count() == 0)
     emit finished();
 
   while(!m_terminate)
   {
-    foreach (const Encoder* e, encoderList)
+    foreach (const Servo* e, servoList)
     {
-      e->sendAzInfoRequest();
+      e->getAngle();
       ((SleepThread*)thread())->msleep(300);
       QApplication::processEvents(QEventLoop::AllEvents);
     }

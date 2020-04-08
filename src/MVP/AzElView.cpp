@@ -7,7 +7,7 @@
 
 AzElView::AzElView(QWidget *parent) : QWidget(parent)
 {
-  m_rotrator = Settings::getInstance()->getRotatorList().at(0);
+  //m_rotrator = Settings::getInstance()->getRotatorList().at(0);
   createView();
 }
 

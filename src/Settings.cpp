@@ -5,8 +5,10 @@
 
 static const QString TCP_UART_CONTROLLER = "tcp_uart_controller";
 static const QString TCP_UART_CONTROLLER_ID = "tcp_uart_controller_id";
-static const QString ENCODER = "encoder";
-static const QString ROTATOR = "rotator";
+static const QString SERVO = "servo";
+
+static const QString ENCODER_ADDRESS = "encoderAddress";
+static const QString ROTATOR_ADDRESS = "rotatorAddress";
 static const QString NAME = "name";
 static const QString TYPE = "type";
 static const QString IP = "ip";
@@ -59,128 +61,59 @@ bool Settings::loadSettings()
   QSettings settings("Config/settings.ini", QSettings::IniFormat);
   if(!loadTcpModule(settings, TCP_UART_CONTROLLER))
   {
-    qCritical()  << "Can't load tcp uart module list";
+    qCritical()  << "Can't load tcp uart module";
     return false;
   }
 
   QStringList groups = settings.childGroups();
   foreach (QString groupName, groups)
   {
-    if(groupName.contains(ENCODER) && !loadEncoder(settings, groupName))
+    if(groupName.contains(SERVO) && !loadServo(settings, groupName))
     {
       ok = false;
       break;
-    }
-    else if(groupName.contains(ROTATOR) && !loadRotator(settings, groupName))
-    {
-      ok = false;
-      break;
-    }
+    }    
   }
 
   qInfo() << "End loadSettings() " << (ok?"":"load error");
   return ok;
 }
 
-const QVector<Encoder *> &Settings::getEncoderList() const
+const QVector<Servo *> &Settings::getServoList() const
 {
-  return m_encoderList;
+  return m_servoList;
 }
 
-const QVector<TcpUartModule *> &Settings::getTcpModuleList() const
-{
-  return m_tcpModuleList;
-}
 
-bool Settings::loadEncoder(const QSettings &settings, const QString &path)
+bool Settings::loadServo(const QSettings &settings, const QString &path)
 {
-  QString id = settings.value(path+SEPARATOR+TCP_UART_CONTROLLER_ID).toString();
-  if(id.isEmpty())
-  {
-    qCritical() << path << SEPARATOR << TCP_UART_CONTROLLER_ID << "is empty";
-    return false;
-  }
   QString name = settings.value(path+SEPARATOR+NAME).toString();
-  if(id.isEmpty())
+  if(name.isEmpty())
   {
     qCritical() << path << SEPARATOR << NAME << "is empty";
     return false;
   }
-  QString address = settings.value(path+SEPARATOR+ADDRESS).toString();
-  int zeroAngle = settings.value(path+SEPARATOR+ZERO_ANGLE, 0).toInt();
+  QString encoderAddress = settings.value(path+SEPARATOR+ENCODER_ADDRESS).toString();
+  QString rotatorAddress = settings.value(path+SEPARATOR+ROTATOR_ADDRESS).toString();
+  int zeroAngle = settings.value(path+SEPARATOR+ZERO_ANGLE, -1).toInt();
 
-  if(address.isEmpty())
+  if(encoderAddress.isEmpty())
   {
-    qCritical() << path << SEPARATOR << ADDRESS << "is empty";
+    qCritical() << path << SEPARATOR << ENCODER_ADDRESS << "is empty";
+    return false;
+  }  
+  if(rotatorAddress.isEmpty())
+  {
+    qCritical() << path << SEPARATOR << ROTATOR_ADDRESS << "is empty";
     return false;
   }
-  TcpUartModule* tcpModule =0x0;
-  foreach (TcpUartModule* m, m_tcpModuleList)
-  {
-    if(m->id().contains(id))
-    {
-      tcpModule = m;
-      break;
-    }
-  }
-  if(tcpModule)
-  {
-    m_encoderList.append(new Encoder(name, QByteArray::fromHex(address.toLatin1()), zeroAngle, tcpModule));
-  }
-  else
-  {
-    qCritical() << "Can't find tcp uart module for " << path;
-    return false;
-  }
+  m_servoList.append(new Servo(name, QByteArray::fromHex(encoderAddress.toLatin1()), QByteArray::fromHex(rotatorAddress.toLatin1()), zeroAngle, m_tcpModule ));
   return true;
 }
 
-bool Settings::loadRotator(const QSettings &settings, const QString &path)
-{
-  QString id = settings.value(path+SEPARATOR+TCP_UART_CONTROLLER_ID).toString();
-  if(id.isEmpty())
-  {
-    qCritical() << path << SEPARATOR << TCP_UART_CONTROLLER_ID << "is empty";
-    return false;
-  }
-
-  QString address = settings.value(path+SEPARATOR+ADDRESS).toString();
-
-  if(address.isEmpty())
-  {
-    qCritical() << path << SEPARATOR << ADDRESS << "is empty";
-    return false;
-  }
-
-  TcpUartModule* tcpModule =0x0;
-  foreach (TcpUartModule* m, m_tcpModuleList)
-  {
-    if(m->id().contains(id))
-    {
-      tcpModule = m;
-      break;
-    }
-  }
-  if(tcpModule)
-  {
-    m_rotatorList.append(new Rotator(QByteArray::fromHex(address.toLatin1()), tcpModule));
-  }
-  else
-  {
-    qCritical() << "Can't find tcp uart module for " << path;
-    return false;
-  }
-  return true;
-}
 
 bool Settings::loadTcpModule(const QSettings &settings, const QString &path)
-{
-  QString id = settings.value(path+SEPARATOR+ID).toString();
-  if(id.isEmpty())
-  {
-    qCritical() << path << SEPARATOR << ID << "is empty";
-    return false;
-  }
+{  
   QString ip = settings.value(path+SEPARATOR+IP).toString();
   if(ip.isEmpty())
   {
@@ -199,19 +132,14 @@ bool Settings::loadTcpModule(const QSettings &settings, const QString &path)
     qCritical() << path << SEPARATOR << MAX_WAITE_DATA << " is empty";
     return false;
   }
-  m_tcpModuleList.append(new TcpUartModule(id,ip, port, maxWaiteData));
+  m_tcpModule = new TcpUartModule(ip, port, maxWaiteData);
   return true;
-}
-
-const QVector<Rotator *> Settings::getRotatorList() const
-{
-  return m_rotatorList;
 }
 
 int Settings::getAngleShiftForEncoder(unsigned short address) const
 {
-  foreach (Encoder* e, m_encoderList) {
-    if(address == e->getAddress())
+  foreach (Servo* e, m_servoList) {
+    if(address == e->getEncoderAddress())
     {
       return e->getAngleShift();
     }

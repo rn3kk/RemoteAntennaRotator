@@ -4,15 +4,13 @@
 #include "TcpUartModule.h"
 
 TcpUartModule::TcpUartModule():
-  m_id(QString()),
   m_dataExchangeThread(0x0),
   m_dataExchange(0x0)
 {
 
 }
 
-TcpUartModule::TcpUartModule(const QString &id, const QString &ip, int port, int maxWaitetime):
-  m_id(id)
+TcpUartModule::TcpUartModule(const QString &ip, int port, int maxWaitetime)
 {
   m_dataExchange = new DataExchange(ip, port, maxWaitetime);
   m_dataExchangeThread = new QThread();
@@ -43,9 +41,4 @@ TcpUartModule::~TcpUartModule()
 void TcpUartModule::writeData(const QByteArray &data)
 {
   m_dataExchange->addToWrite(data);
-}
-
-QString TcpUartModule::id() const
-{
-  return m_id;
 }

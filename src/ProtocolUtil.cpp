@@ -81,17 +81,17 @@ EncoderData ProtocolUtil::getEncoderData(const QByteArray &data)
     if((tmp == 1) && ((b3 & 0x40) == 0x40))
     {
       // проверка на четность пройдена, данные верные
-      return EncoderData(getAngle(val_16*0.087890625, angleShift), true, true);
+      return EncoderData(address, getAngle(val_16*0.087890625, angleShift), true, true);
     }
     if((tmp == 0) && ((b3 & 0x40) == 0))
     {
       // проверка на четность пройдена, данные верные
-      return EncoderData(getAngle(val_16*0.087890625, angleShift), true, true);
+      return EncoderData(address, getAngle(val_16*0.087890625, angleShift), true, true);
     }
   }
   else
   {  //магнит установлен не правильно, данным верить нельзя
-    return EncoderData(getAngle(val_16*0.087890625, angleShift), false, false);
+    return EncoderData(address, -2, false, false);
   }
 }
 

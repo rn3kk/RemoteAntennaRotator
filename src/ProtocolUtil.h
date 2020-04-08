@@ -5,14 +5,16 @@
 
 struct EncoderData
 {
-  EncoderData(float deg, bool magnetIsOk, bool dataIsValid)
+  EncoderData(unsigned int encoderAddress, float deg, bool magnetIsOk, bool dataIsValid)
   {
+    this->encoderAddress = encoderAddress;
     this->deg = deg;    
     this->magnetIsOk = magnetIsOk;
     this->dataIsValid = dataIsValid;
   }
   EncoderData(const EncoderData& data)
   {
+    encoderAddress=data.encoderAddress;
     deg=data.deg;
     magnetIsOk=data.magnetIsOk;
     dataIsValid=data.dataIsValid;
@@ -20,11 +22,13 @@ struct EncoderData
 
   EncoderData()
   {
+    encoderAddress=0;
     deg=-1;
     magnetIsOk=false;
     dataIsValid=false;
   }
 
+  unsigned int encoderAddress;
   float deg;
   bool magnetIsOk;
   bool dataIsValid;

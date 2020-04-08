@@ -52,7 +52,6 @@ private:
 
   ModuleSate m_state;
 
-
 };
 
 #endif // SPIROMETRDATAEXCHANGE_H

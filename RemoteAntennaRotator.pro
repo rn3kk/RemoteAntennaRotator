@@ -25,6 +25,7 @@ DESTDIR = $${OUT_DIR}
 
 SOURCES += \
     src/DataExchange.cpp \
+    src/Servo.cpp \
     src/main.cpp \
     src/Log/Log.cpp \
     src/MVP/Model.cpp \
@@ -32,7 +33,6 @@ SOURCES += \
     src/MVP/AzElView.cpp \
     src/ProtocolUtil.cpp \
     src/Settings.cpp \
-    src/Encoder.cpp \
     src/EncoderMonitor.cpp \
     src/MessageBus.cpp \
     src/TcpUartModule.cpp \
@@ -41,6 +41,7 @@ SOURCES += \
 HEADERS  += \
     src/DataExchange.h \
     src/IDataExchange.h \
+    src/Servo.h \
     src/sleepthread.h \
     src/Log/Log.h \
     src/MVP/Model.h \
@@ -48,7 +49,6 @@ HEADERS  += \
     src/MVP/AzElView.h \
     src/ProtocolUtil.h \
     src/Settings.h \
-    src/Encoder.h \
     src/EncoderMonitor.h \
     src/MessageBus.h \
     src/TcpUartModule.h \
@@ -57,4 +57,5 @@ HEADERS  += \
 
 FORMS    +=
 
-DISTFILES +=
+DISTFILES += \
+    Config/settings.ini
