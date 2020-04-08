@@ -28,7 +28,7 @@ EncoderData ProtocolUtil::getEncoderData(const QByteArray &data)
   {
     return EncoderData();
   }
-  unsigned int address = data.at(1);
+  unsigned char address = data.at(1);
 
   int angleShift = Settings::getInstance()->getAngleShiftForEncoder(address);
 

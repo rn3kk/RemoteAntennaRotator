@@ -107,7 +107,9 @@ bool Settings::loadServo(const QSettings &settings, const QString &path)
     qCritical() << path << SEPARATOR << ROTATOR_ADDRESS << "is empty";
     return false;
   }
-  m_servoList.append(new Servo(name, QByteArray::fromHex(encoderAddress.toLatin1()), QByteArray::fromHex(rotatorAddress.toLatin1()), zeroAngle, m_tcpModule ));
+  unsigned char encAdr = QByteArray::fromHex(encoderAddress.toLatin1()).at(0);
+  unsigned char rotAdr = QByteArray::fromHex(rotatorAddress.toLatin1()).at(0);
+  m_servoList.append(new Servo(name, encAdr, rotAdr, zeroAngle, m_tcpModule ));
   return true;
 }
 

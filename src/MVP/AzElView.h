@@ -9,11 +9,11 @@
 
 class Rotator;
 
-class AzElView : public QWidget
+class AngleView : public QWidget
 {
   Q_OBJECT
 public:
-  explicit AzElView(QWidget *parent = 0);
+  explicit AngleView(QWidget *parent = 0);
 
   void setAz(float az);
   void setEl(float el);

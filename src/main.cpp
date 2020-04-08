@@ -1,4 +1,6 @@
 #include <QApplication>
+#include <QWidget>
+#include <QVBoxLayout>
 #include <QThread>
 
 #include "iostream"
@@ -30,11 +32,20 @@ int main(int argc, char *argv[])
 
   MessageBus* messageBus = MessageBus::getInstance();
 
-  Presentor p;
-  QWidget* w = p.getView();
-  w->show();
+  QWidget* mainWidget = new QWidget();
+  QVBoxLayout* vbox = new QVBoxLayout();
+  for(Servo* servo: settings->getServoList())
+  {
+    unsigned int address = servo->getEncoderAddress();
+    Presentor* p = new Presentor(address);
+    QWidget* w = p->getView();
+    vbox->addWidget(w);
+    QObject::connect(messageBus, SIGNAL(encoderData(void*)), p, SLOT(dataFromEncoder(void*)));
+  }
 
-  QObject::connect(messageBus, SIGNAL(encoderData(void*)), &p, SLOT(dataFromEncoder(void*)));
+  mainWidget->setLayout(vbox);
+  mainWidget->show();
+
 
   QThread* encoderMonitorThread = new QThread();
   EncoderMonitor* em = new EncoderMonitor();

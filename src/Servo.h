@@ -9,18 +9,18 @@ class Servo
 {
 public:
   Servo();
-  Servo(const QString& name, const QByteArray& encoderAddress, const QByteArray& rotatorAddress, int angleShift, TcpUartModule* tcpModule);
+  Servo(const QString& name, unsigned char encoderAddress, unsigned char rotatorAddress, int angleShift, TcpUartModule* tcpModule);
 
   QString name() const;
   void getAngle() const;
-  unsigned int getEncoderAddress() const;
-  unsigned int getRotatorAddress() const;
+  unsigned char getEncoderAddress() const;
+  unsigned char getRotatorAddress() const;
   int getAngleShift() const;
 
 private:
   QString m_name;
-  QByteArray m_encoderAddress;
-  QByteArray m_rotatorAddress;
+  unsigned char m_encoderAddress;
+  unsigned char m_rotatorAddress;
   int m_angleShift;
   TcpUartModule* m_tcpUartModule;
 

@@ -1,7 +1,9 @@
 #include "../ProtocolUtil.h"
 #include "Presentor.h"
 
-Presentor::Presentor(QObject *parent) : QObject(parent)
+Presentor::Presentor(unsigned int id, QObject *parent) :
+  m_id(id),
+  QObject(parent)
 {
   QObject::connect(&m_view, SIGNAL(viewIsClosed()), this, SIGNAL(viewIsClose()));
 }
@@ -14,11 +16,14 @@ QWidget *Presentor::getView()
 void Presentor::dataFromEncoder(void *p)
 {
   if(p != 0x0)
+  {
+    EncoderData* e = (EncoderData*)p;
+    if(e->encoderAddress == m_id)
     {
-      EncoderData* e = (EncoderData*)p;
-      azIsChange(e->deg);
+      angleIsChanged(e->deg);
       delete e;
     }
+  }
 }
 
 void Presentor::encoderChangeSate(int state)
@@ -26,14 +31,8 @@ void Presentor::encoderChangeSate(int state)
 
 }
 
-void Presentor::azIsChange(float az)
+void Presentor::angleIsChanged(float az)
 {
   m_model.setAz(az);
   m_view.setAz(az);
-}
-
-void Presentor::elIsChange(float el)
-{
-  m_model.setEl(el);
-  m_model.setEl(el);
 }

@@ -8,13 +8,14 @@ Servo::Servo()
 
 }
 
-Servo::Servo(const QString &name, const QByteArray &encoderAddress, const QByteArray &rotatorAddress, int angleShift, TcpUartModule *tcpModule):
+Servo::Servo(const QString &name, unsigned char encoderAddress, unsigned char rotatorAddress, int angleShift, TcpUartModule *tcpModule):
   m_name(name),
+  m_encoderAddress(encoderAddress),
   m_rotatorAddress(rotatorAddress),
   m_angleShift(angleShift),
   m_tcpUartModule(tcpModule)
 {
-  unsigned char address = encoderAddress.at(0);
+  unsigned char address = encoderAddress;
   unsigned char length = 0x81;
   unsigned char data1 = 0x02;
   unsigned char crc = ProtocolUtil::createCrc(length, address, data1, 0x0, 0x0);
@@ -36,16 +37,14 @@ void Servo::getAngle() const
   m_tcpUartModule->writeData(m_angleRequestBinaryData);
 }
 
-unsigned int Servo::getEncoderAddress() const
+unsigned char Servo::getEncoderAddress() const
 {
-  if(m_encoderAddress.isNull() || m_encoderAddress.isEmpty()) return 0;
-  return m_encoderAddress.at(0);
+  return m_encoderAddress;
 }
 
-unsigned int Servo::getRotatorAddress() const
+unsigned char Servo::getRotatorAddress() const
 {
-  if(m_rotatorAddress.isNull() || m_rotatorAddress.isEmpty()) return 0;
-  return m_rotatorAddress.at(0);
+  return m_rotatorAddress;
 }
 
 int Servo::getAngleShift() const

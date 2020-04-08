@@ -5,61 +5,61 @@
 
 #include "AzElView.h"
 
-AzElView::AzElView(QWidget *parent) : QWidget(parent)
+AngleView::AngleView(QWidget *parent) : QWidget(parent)
 {
   //m_rotrator = Settings::getInstance()->getRotatorList().at(0);
   createView();
 }
 
-void AzElView::setAz(float az)
+void AngleView::setAz(float az)
 {  
   m_az->setText(QString::number(az));
 }
 
-void AzElView::setEl(float el)
+void AngleView::setEl(float el)
 {
   m_el->setText(QString::number(el));
 }
 
-void AzElView::hideAz()
+void AngleView::hideAz()
 {
   m_az->setText("");
 }
 
-void AzElView::hideEl()
+void AngleView::hideEl()
 {
   m_el->setText("");
 }
 
-void AzElView::closeEvent(QCloseEvent *event)
+void AngleView::closeEvent(QCloseEvent *event)
 {
   emit viewIsClosed();
 }
 
-void AzElView::toLeftPressed()
+void AngleView::toLeftPressed()
 {
   m_rotrator->toLeft();
 }
 
-void AzElView::toRightPressed()
+void AngleView::toRightPressed()
 {
   m_rotrator->toRight();
 }
 
-void AzElView::toEndPressed()
+void AngleView::toEndPressed()
 {
   if(dynamic_cast<QPushButton*>(sender())->isDown()) return;
   m_rotrator->toStop();
 }
 
-void AzElView::attChanged(const QString &attValue)
+void AngleView::attChanged(const QString &attValue)
 {
   qDebug() << "ATT is changed to " << attValue;
   unsigned char value = attValue.toUInt();
   m_rotrator->attChange(value);
 }
 
-void AzElView::createView()
+void AngleView::createView()
 {
   QSize size(50,50);
 
@@ -82,7 +82,6 @@ void AzElView::createView()
   m_toRight->setText(">");
   connect(m_toRight, SIGNAL(pressed()), this, SLOT(toRightPressed()));
   connect(m_toRight, SIGNAL(released()), this, SLOT(toEndPressed()));
-
 
   QVBoxLayout* vbox = new QVBoxLayout(dynamic_cast<QWidget*>(hBox));
 

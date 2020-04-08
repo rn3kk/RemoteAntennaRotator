@@ -10,7 +10,7 @@ class Presentor : public QObject
 {
   Q_OBJECT
 public:
-  explicit Presentor(QObject *parent = 0);
+  explicit Presentor(unsigned int id, QObject *parent = 0);
 
   QWidget* getView();
 
@@ -20,12 +20,12 @@ signals:
 public slots:
   void dataFromEncoder(void*);
   void encoderChangeSate(int state);
-  void azIsChange(float az);
-  void elIsChange(float el);
+  void angleIsChanged(float az);
 
 private:
   Model m_model;
-  AzElView m_view;
+  AngleView m_view;
+  unsigned int m_id;
 };
 
 #endif // PRESENTOR_H
