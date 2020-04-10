@@ -22,6 +22,12 @@ public:
   void hideEl();
 
 signals:
+  void toLeft();
+  void toRight();
+  void toUp();
+  void toDown();
+  void stopAz();
+  void stopEl();
   void viewIsClosed();  
 
 public slots:
@@ -43,7 +49,6 @@ private:
   QPushButton* m_toDown;  
 
   QSpinBox* m_attBox;
-  Rotator* m_rotrator;
 };
 
 #endif // AZELVIEW_H

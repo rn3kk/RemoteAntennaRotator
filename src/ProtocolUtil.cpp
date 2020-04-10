@@ -13,11 +13,6 @@ ProtocolUtil::ProtocolUtil()
   unsigned char c = createCrc(0x82, 0xA9, 0x09, 0x55, 0x0);
   c = createCrc(0x81, 0xA0, 0x02,0x0,0x0);
   c = createCrc(0x81, 0xA0, 0x0,0x0,0x0);
-  int d = getAngle(300, 30);
-  d = getAngle(100, 250);
-  d = getAngle(200, 190);
-  d = getAngle(300, 30);
-  d = getAngle(300, 30);
 
 }
 
@@ -29,8 +24,6 @@ EncoderData ProtocolUtil::getEncoderData(const QByteArray &data)
     return EncoderData();
   }
   unsigned char address = data.at(1);
-
-  int angleShift = Settings::getInstance()->getAngleShiftForEncoder(address);
 
   unsigned int val_16;
   unsigned char b1, b2, b3;
@@ -81,12 +74,12 @@ EncoderData ProtocolUtil::getEncoderData(const QByteArray &data)
     if((tmp == 1) && ((b3 & 0x40) == 0x40))
     {
       // проверка на четность пройдена, данные верные
-      return EncoderData(address, getAngle(val_16*0.087890625, angleShift), true, true);
+      return EncoderData(address, val_16*0.087890625, true, true);
     }
     if((tmp == 0) && ((b3 & 0x40) == 0))
     {
       // проверка на четность пройдена, данные верные
-      return EncoderData(address, getAngle(val_16*0.087890625, angleShift), true, true);
+      return EncoderData(address, val_16*0.087890625, true, true);
     }
   }
   else
@@ -122,14 +115,4 @@ unsigned char ProtocolUtil::createCrc( const unsigned char datalen, const unsign
   return crc_send;
 }
 
-int ProtocolUtil::getAngle(int currentAngle, int angleShift)
-{
-  if (angleShift == 0)
-    return currentAngle;
-  int deg = currentAngle + angleShift;
-  if(deg >= 360)
-  {
-    deg = deg - 360;
-  }
-  return deg;
-}
+

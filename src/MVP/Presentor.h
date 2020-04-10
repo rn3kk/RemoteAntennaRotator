@@ -6,11 +6,13 @@
 #include "Model.h"
 #include "AzElView.h"
 
+class Servo;
+
 class Presentor : public QObject
 {
   Q_OBJECT
 public:
-  explicit Presentor(unsigned int id, QObject *parent = 0);
+  explicit Presentor(Servo* servo, QObject *parent = 0);
 
   QWidget* getView();
 
@@ -20,12 +22,13 @@ signals:
 public slots:
   void dataFromEncoder(void*);
   void encoderChangeSate(int state);
-  void angleIsChanged(float az);
+  void azIsChanged(float az);
+  void elIsChanged(float el);
 
 private:
   Model m_model;
   AngleView m_view;
-  unsigned int m_id;
+  Servo* m_servo;
 };
 
 #endif // PRESENTOR_H

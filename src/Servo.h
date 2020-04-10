@@ -4,27 +4,27 @@
 #include <QString>
 
 class TcpUartModule;
+class Encoder;
+class Rotator;
 
 class Servo
 {
 public:
   Servo();
-  Servo(const QString& name, unsigned char encoderAddress, unsigned char rotatorAddress, int angleShift, TcpUartModule* tcpModule);
+  Servo(const QString& name, Encoder* azEncoder, Encoder* elEncoder, Rotator* m_rotator);
+
+  int azEncoderAddress();
+  int elEncoderAddress();
 
   QString name() const;
-  void getAngle() const;
-  unsigned char getEncoderAddress() const;
-  unsigned char getRotatorAddress() const;
-  int getAngleShift() const;
+
+  void updateAngle();
 
 private:
   QString m_name;
-  unsigned char m_encoderAddress;
-  unsigned char m_rotatorAddress;
-  int m_angleShift;
-  TcpUartModule* m_tcpUartModule;
-
-  QByteArray m_angleRequestBinaryData;
+  Encoder* m_azEncoder;
+  Encoder* m_elEncoder;
+  Rotator* m_rotator;
 };
 
 #endif // REMOTEENCODER_H

@@ -7,7 +7,6 @@
 
 AngleView::AngleView(QWidget *parent) : QWidget(parent)
 {
-  //m_rotrator = Settings::getInstance()->getRotatorList().at(0);
   createView();
 }
 
@@ -38,25 +37,21 @@ void AngleView::closeEvent(QCloseEvent *event)
 
 void AngleView::toLeftPressed()
 {
-  m_rotrator->toLeft();
+
 }
 
 void AngleView::toRightPressed()
 {
-  m_rotrator->toRight();
 }
 
 void AngleView::toEndPressed()
 {
-  if(dynamic_cast<QPushButton*>(sender())->isDown()) return;
-  m_rotrator->toStop();
+
 }
 
 void AngleView::attChanged(const QString &attValue)
 {
-  qDebug() << "ATT is changed to " << attValue;
-  unsigned char value = attValue.toUInt();
-  m_rotrator->attChange(value);
+
 }
 
 void AngleView::createView()
@@ -65,7 +60,11 @@ void AngleView::createView()
 
   QHBoxLayout* hBox = new QHBoxLayout(this);
 
-  m_toLeft = new QPushButton(dynamic_cast<QWidget*>(hBox));
+  QVBoxLayout* first = new QVBoxLayout(this);
+  QVBoxLayout* second = new QVBoxLayout(this);
+  QVBoxLayout* third = new QVBoxLayout(this);
+
+  m_toLeft = new QPushButton(dynamic_cast<QWidget*>(first));
   m_toLeft->setAutoRepeat(true);
   m_toLeft->setAutoRepeatInterval(300);
   m_toLeft->setMinimumSize(size);
@@ -73,9 +72,28 @@ void AngleView::createView()
   connect(m_toLeft, SIGNAL(pressed()), this, SLOT(toLeftPressed()));
   connect(m_toLeft, SIGNAL(released()), this, SLOT(toEndPressed()));
 
-  hBox->addWidget(m_toLeft);
+  m_toUp = new QPushButton(dynamic_cast<QWidget*>(first));
+  m_toUp->setAutoRepeat(true);
+  m_toUp->setAutoRepeatInterval(300);
+  m_toUp->setMinimumSize(size);
+  m_toUp->setText("^");
+  connect(m_toUp, SIGNAL(pressed()), this, SLOT(toLeftPressed()));
+  connect(m_toUp, SIGNAL(released()), this, SLOT(toEndPressed()));
+  first->addWidget(m_toLeft);
+  first->addWidget(m_toUp);
 
-  m_toRight = new QPushButton(dynamic_cast<QWidget*>(hBox));
+  QFont font("Arial", 20, QFont::Bold);
+  m_az = new QLabel(dynamic_cast<QWidget*>(second));
+  m_az->setText("-1");
+  m_az->setFont(font);
+  m_el = new QLabel(dynamic_cast<QWidget*>(second));
+  m_el->setText("-1");
+  m_el->setFont(font);
+
+  second->addWidget(m_az);
+  second->addWidget(m_el);
+
+  m_toRight = new QPushButton(dynamic_cast<QWidget*>(third));
   m_toRight->setAutoRepeat(true);
   m_toRight->setAutoRepeatInterval(300);
   m_toRight->setMinimumSize(size);
@@ -83,17 +101,19 @@ void AngleView::createView()
   connect(m_toRight, SIGNAL(pressed()), this, SLOT(toRightPressed()));
   connect(m_toRight, SIGNAL(released()), this, SLOT(toEndPressed()));
 
-  QVBoxLayout* vbox = new QVBoxLayout(dynamic_cast<QWidget*>(hBox));
+  m_toDown = new QPushButton(dynamic_cast<QWidget*>(third));
+  m_toDown->setAutoRepeat(true);
+  m_toDown->setAutoRepeatInterval(300);
+  m_toDown->setMinimumSize(size);
+  m_toDown->setText("Y");
+  connect(m_toDown, SIGNAL(pressed()), this, SLOT(toRightPressed()));
+  connect(m_toDown, SIGNAL(released()), this, SLOT(toEndPressed()));
+  third->addWidget(m_toRight);
+  third->addWidget(m_toDown);
 
-  m_az = new QLabel(dynamic_cast<QWidget*>(vbox));
-  m_az->setText("-1");
+  hBox->addLayout(first);
+  hBox->addLayout(second);
+  hBox->addLayout(third);
 
-  vbox->addWidget(m_az);
-  QFont font("Arial", 20, QFont::Bold);
-  m_az->setFont(font);
-
-  hBox->addLayout(vbox);
-  hBox->addWidget(m_toRight);
   setLayout(hBox);
-
 }
