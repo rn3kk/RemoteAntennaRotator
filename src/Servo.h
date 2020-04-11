@@ -18,7 +18,7 @@ public:
 
   QString name() const;
 
-  void updateAngle();
+  void updateAngleRequest();
 
 private:
   QString m_name;

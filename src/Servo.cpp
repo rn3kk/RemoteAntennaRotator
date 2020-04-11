@@ -5,7 +5,6 @@
 #include "Encoder.h"
 #include "Servo.h"
 
-
 Servo::Servo()
 {
 
@@ -35,7 +34,10 @@ QString Servo::name() const
   return m_name;
 }
 
-void Servo::updateAngle()
+void Servo::updateAngleRequest()
 {
-
+  if(m_azEncoder)
+    m_azEncoder->sendAngleRquest();
+  if(m_azEncoder)
+    m_elEncoder->sendAngleRquest();
 }

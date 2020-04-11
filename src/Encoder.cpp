@@ -9,11 +9,11 @@ Encoder::Encoder()
 
 }
 
-Encoder::Encoder(unsigned char address, int angleShift, TcpUartModule *tcpModule, QObject *parent):
+
+Encoder::Encoder(unsigned char address, int angleShift, TcpUartModule *tcpUartModule):
   m_address(address),
   m_angleShift(angleShift),
-  m_tcpUartModule(tcpModule),
-  QObject(parent)
+  m_tcpUartModule(tcpUartModule)
 {
   unsigned char length = 0x81;
   unsigned char data1 = 0x02;
@@ -24,8 +24,6 @@ Encoder::Encoder(unsigned char address, int angleShift, TcpUartModule *tcpModule
   m_angleRequestBinaryData.append(data1);
   m_angleRequestBinaryData.append(crc);
   m_angleRequestBinaryData.append(STOP_BYTE);
-
-  startTimer(1);
 }
 
 int Encoder::getAddress() const
@@ -38,11 +36,8 @@ int Encoder::getAngleShift() const
   return m_angleShift;
 }
 
-
-
-void Encoder::timerEvent(QTimerEvent *event)
+void Encoder::sendAngleRquest()
 {
-  killTimer(event->timerId());
-  m_tcpUartModule->writeData(m_angleRequestBinaryData);
-  startTimer(300);
+  if(m_tcpUartModule)
+    m_tcpUartModule->writeData(m_angleRequestBinaryData);
 }

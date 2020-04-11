@@ -13,6 +13,9 @@ public:
 signals:
   void encoderData(void*);
 
+protected:
+  void timerEvent(QTimerEvent *event) override;
+
 private:
   MessageBus();
   ~MessageBus();
