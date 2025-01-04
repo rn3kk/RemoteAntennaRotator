@@ -15,10 +15,10 @@ public:
   void sendAngleRquest();
 
 private:
-  unsigned char m_address;
-  int m_angleShift;  
+  unsigned char m_address = 0xA0;
+  int m_angleShift = 0;
   QByteArray m_angleRequestBinaryData;
-  TcpUartModule* m_tcpUartModule;
+  TcpUartModule* m_tcpUartModule = nullptr;
 };
 
 #endif // ENCODER_H

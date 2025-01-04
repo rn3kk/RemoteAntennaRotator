@@ -1,7 +1,9 @@
-#include <QFile>
-#include <QTextStream>
-#include <QString>
 #include <QDateTime>
+#include <QDir>
+#include <QFile>
+#include <QStandardPaths>
+#include <QString>
+#include <QTextStream>
 
 #include "Log.h"
 
@@ -27,7 +29,22 @@ void toLog(QtMsgType type, const QMessageLogContext &context, const QString &msg
   }
   QDateTime now =QDateTime::currentDateTime();
   txt = QString("%1 " + txt).arg(now.toString("dd.MM.yyyy HH.mm.ss"));
-  QFile outFile("log.log");
+
+  auto path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+  if (path.isEmpty())
+  {
+    qFatal("Cannot determine settings storage location");
+    exit(1);
+  }
+
+  QDir d{path};
+  if(!d.mkpath(d.absolutePath()))
+  {
+    qFatal() << "Cant create dir for save logs";
+    exit(1);
+  }
+
+  QFile outFile(path + "/AntennaRotator.log");
   outFile.open(QIODevice::WriteOnly | QIODevice::Append);
   QTextStream ts(&outFile);
   ts << txt << "\r\n";

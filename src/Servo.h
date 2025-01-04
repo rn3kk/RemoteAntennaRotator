@@ -21,7 +21,7 @@ public:
   void updateAngleRequest();
 
 private:
-  QString m_name;
+  QString m_name = "azimit";
   Encoder* m_azEncoder;
   Encoder* m_elEncoder;
   Rotator* m_rotator;

@@ -21,14 +21,14 @@ public:
   void attChange(unsigned char att);
 
 private:
-  const unsigned char m_address;
+  const unsigned char m_address = 0xA1;
   QByteArray m_toLeftBinaryData;
   QByteArray m_toRightBinaryData;
   QByteArray m_toUpBinaryData;
   QByteArray m_toDownBinaryData;
   QByteArray m_toStopAzBinaryData;
   QByteArray m_toStopElBinaryData;
-  TcpUartModule* m_tcpUartModule;
+  TcpUartModule* m_tcpUartModule = nullptr;
 };
 
 #endif // ROTATOR_H

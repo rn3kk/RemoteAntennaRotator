@@ -4,9 +4,9 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network
+QT       += core gui network widgets
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 6): QT += widgets
 
 TARGET = RemoteAntennaRotator
 TEMPLATE = app
@@ -26,7 +26,9 @@ DESTDIR = $${OUT_DIR}
 SOURCES += \
     src/DataExchange.cpp \
     src/Encoder.cpp \
+    src/MainWindow.cpp \
     src/Servo.cpp \
+    src/ServoSettingsView.cpp \
     src/main.cpp \
     src/Log/Log.cpp \
     src/MVP/Model.cpp \
@@ -42,7 +44,9 @@ HEADERS  += \
     src/DataExchange.h \
     src/Encoder.h \
     src/IDataExchange.h \
+    src/MainWindow.h \
     src/Servo.h \
+    src/ServoSettingsView.h \
     src/sleepthread.h \
     src/Log/Log.h \
     src/MVP/Model.h \

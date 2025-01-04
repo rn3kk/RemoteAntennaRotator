@@ -1,15 +1,14 @@
 #include <QApplication>
-#include <QWidget>
-#include <QVBoxLayout>
 #include <QThread>
+#include <QVBoxLayout>
+#include <QWidget>
 
-#include "iostream"
-#include "Settings.h"
 #include "Log/Log.h"
-#include "DataExchange.h"
-#include "ProtocolUtil.h"
 #include "MVP/Presentor.h"
 #include "MessageBus.h"
+#include "ProtocolUtil.h"
+#include "ServoSettingsView.h"
+#include "Settings.h"
 
 #include <QLoggingCategory>
 
@@ -20,29 +19,40 @@ int main(int argc, char *argv[])
   QApplication a(argc, argv);
   qInstallMessageHandler(toLog);
 
-  ProtocolUtil pu;
+  QCoreApplication::setOrganizationName("Bi4Remote");
+  QCoreApplication::setOrganizationDomain("bi4remote.ru");
+  QCoreApplication::setApplicationName("Bi4AntennaRotator");
 
-  Settings* settings = Settings::getInstance();
-  if(settings == 0x0)
-  {    
-    qCritical("Can't load settings");
-    return 0;
-  }
+  ServoSettingsView ssw;
+  ssw.show();
 
-  MessageBus* messageBus = MessageBus::getInstance();
+  // ProtocolUtil pu;
 
-  QWidget* mainWidget = new QWidget();
-  QVBoxLayout* vbox = new QVBoxLayout();
-  for(Servo* servo: settings->getServoList())
-  {
-    Presentor* p = new Presentor(servo);
-    QWidget* w = p->getView();
-    vbox->addWidget(w);
-    QObject::connect(messageBus, SIGNAL(encoderData(void*)), p, SLOT(dataFromEncoder(void*)));
-  }
+  // Settings* settings = Settings::getInstance();
+  // if(settings == 0x0)
+  // {
+  //   qCritical("Can't load settings");
+  //   return 0;
+  // }
+  // auto vs = settings->getServoSettings();
 
-  mainWidget->setLayout(vbox);
-  mainWidget->show();
+  // MessageBus* messageBus = MessageBus::getInstance();
+
+
+
+
+  // QWidget* mainWidget = new QWidget();
+  // QVBoxLayout* vbox = new QVBoxLayout();
+  // for(Servo* servo: settings->getServoList())
+  // {
+  //   Presentor* p = new Presentor(servo);
+  //   QWidget* w = p->getView();
+  //   vbox->addWidget(w);
+  //   QObject::connect(messageBus, SIGNAL(encoderData(void*)), p, SLOT(dataFromEncoder(void*)));
+  // }
+
+  // mainWidget->setLayout(vbox);
+  // mainWidget->show();
 
   a.exec();
 
