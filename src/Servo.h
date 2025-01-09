@@ -21,7 +21,7 @@ public:
   void updateAngleRequest();
 
 private:
-  QString m_name = "azimit";
+  QString m_name = "2m EME antenna";
   Encoder* m_azEncoder;
   Encoder* m_elEncoder;
   Rotator* m_rotator;

@@ -29,6 +29,7 @@ SOURCES += \
     src/MainWindow.cpp \
     src/Servo.cpp \
     src/ServoSettingsView.cpp \
+    src/TcpSettingsView.cpp \
     src/main.cpp \
     src/Log/Log.cpp \
     src/MVP/Model.cpp \
@@ -47,6 +48,7 @@ HEADERS  += \
     src/MainWindow.h \
     src/Servo.h \
     src/ServoSettingsView.h \
+    src/TcpSettingsView.h \
     src/sleepthread.h \
     src/Log/Log.h \
     src/MVP/Model.h \

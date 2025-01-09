@@ -9,6 +9,7 @@
 #include "ProtocolUtil.h"
 #include "ServoSettingsView.h"
 #include "Settings.h"
+#include "TcpSettingsView.h"
 
 #include <QLoggingCategory>
 
@@ -25,6 +26,9 @@ int main(int argc, char *argv[])
 
   ServoSettingsView ssw;
   ssw.show();
+
+  TcpSettingsView tsv;
+  tsv.show();
 
   // ProtocolUtil pu;
 
